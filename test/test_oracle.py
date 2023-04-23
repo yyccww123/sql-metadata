@@ -26,3 +26,16 @@ def test_from_to_table():
         """
     assert ["aa"] == Parser(sql).to_tables
     assert ["bb", "cc"] == Parser(sql).from_tables
+
+
+    sql = """
+        insert into aa
+        (
+        a
+        )
+        select a.a from bb a
+        left join (select * from cc) b
+        on a.a = b.b
+        """
+    assert ["aa"] == Parser(sql).to_tables
+    assert ["bb", "cc"] == Parser(sql).from_tables
