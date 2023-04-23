@@ -48,6 +48,8 @@ class Parser:  # pylint: disable=R0902
         self._columns_aliases_dict = None
 
         self._tables = None
+        self._from_tables = None
+        self._to_tables = None
         self._table_aliases = None
 
         self._with_names = None
@@ -362,6 +364,82 @@ class Parser:  # pylint: disable=R0902
                 if (
                     token.last_keyword_normalized == "UPDATE"
                     and self.query_type == "INSERT"
+                ):
+                    continue
+
+                table_name = str(token.value.strip("`"))
+                token.token_type = TokenType.TABLE
+                tables.append(table_name)
+
+        self._tables = tables - with_names
+        return self._tables
+
+    @property
+    def from_tables(self) -> List[str]:
+        """
+        Return the list of tables this query refers to
+        """
+        if self._tables is not None:
+            return self._tables
+        tables = UniqueList()
+        with_names = self.with_names
+
+        for token in self._not_parsed_tokens:
+            if token.is_potential_from_table_name:
+                if (
+                        token.is_alias_of_table_or_alias_of_subquery
+                        or token.is_with_statement_nested_in_subquery
+                        or token.is_constraint_definition_inside_create_table_clause(
+                    query_type=self.query_type
+                )
+                        or token.is_columns_alias_of_with_query_or_column_in_insert_query(
+                    with_names=with_names
+                )
+                ):
+                    continue
+
+                # handle INSERT INTO ON DUPLICATE KEY UPDATE queries
+                if (
+                        token.last_keyword_normalized == "UPDATE"
+                        and self.query_type == "INSERT"
+                ):
+                    continue
+
+                table_name = str(token.value.strip("`"))
+                token.token_type = TokenType.TABLE
+                tables.append(table_name)
+
+        self._tables = tables - with_names
+        return self._tables
+
+    @property
+    def to_tables(self) -> List[str]:
+        """
+        Return the list of tables this query refers to
+        """
+        if self._tables is not None:
+            return self._tables
+        tables = UniqueList()
+        with_names = self.with_names
+
+        for token in self._not_parsed_tokens:
+            if token.is_potential_to_table_name:
+                if (
+                        token.is_alias_of_table_or_alias_of_subquery
+                        or token.is_with_statement_nested_in_subquery
+                        or token.is_constraint_definition_inside_create_table_clause(
+                    query_type=self.query_type
+                )
+                        or token.is_columns_alias_of_with_query_or_column_in_insert_query(
+                    with_names=with_names
+                )
+                ):
+                    continue
+
+                # handle INSERT INTO ON DUPLICATE KEY UPDATE queries
+                if (
+                        token.last_keyword_normalized == "UPDATE"
+                        and self.query_type == "INSERT"
                 ):
                     continue
 

@@ -34,6 +34,29 @@ TABLE_ADJUSTMENT_KEYWORDS = {
     "USING",
 }
 
+# 来源表前关键字
+FROM_TABLE_ADJUSTMENT_KEYWORDS = {
+    "FROM",
+    "JOIN",
+    "CROSSJOIN",
+    "INNERJOIN",
+    "FULLJOIN",
+    "FULLOUTERJOIN",
+    "LEFTJOIN",
+    "RIGHTJOIN",
+    "LEFTOUTERJOIN",
+    "RIGHTOUTERJOIN",
+    "USING",
+}
+
+# 目标表前关键字
+TO_TABLE_ADJUSTMENT_KEYWORDS = {
+    "INTO",
+    "UPDATE",
+    "TABLE",
+    "USING",
+}
+
 # next statement beginning after with statement
 WITH_ENDING_KEYWORDS = {"UPDATE", "SELECT", "DELETE", "REPLACE", "INSERT"}
 
@@ -49,6 +72,8 @@ SUBQUERY_PRECEDING_KEYWORDS = {
     "RIGHTJOIN",
     "LEFTOUTERJOIN",
     "RIGHTOUTERJOIN",
+    "USING",
+    "INTO",
 }
 
 # section of a query in which column can exists

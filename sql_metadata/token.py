@@ -11,6 +11,8 @@ from sql_metadata.keywords_lists import (
     RELEVANT_KEYWORDS,
     QueryType,
     TABLE_ADJUSTMENT_KEYWORDS,
+    FROM_TABLE_ADJUSTMENT_KEYWORDS,
+    TO_TABLE_ADJUSTMENT_KEYWORDS,
 )
 
 
@@ -263,6 +265,32 @@ class SQLToken:  # pylint: disable=R0902, R0904
             and self.previous_token.normalized not in ["AS", "WITH"]
             and self.normalized not in ["AS", "SELECT", "IF", "SET", "WITH"]
         )
+
+    @property
+    def is_potential_from_table_name(self) -> bool:
+        """
+        Checks if token is a possible candidate for table name
+        """
+        return (
+                (self.is_name or self.is_keyword)
+                and self.last_keyword_normalized in FROM_TABLE_ADJUSTMENT_KEYWORDS
+                and self.previous_token.normalized not in ["AS", "WITH"]
+                and self.normalized not in ["AS", "SELECT", "IF", "SET", "WITH"]
+        )
+
+    @property
+    def is_potential_to_table_name(self) -> bool:
+        """
+        Checks if token is a possible candidate for table name
+        """
+        return (
+                (self.is_name or self.is_keyword)
+                and self.last_keyword_normalized in TO_TABLE_ADJUSTMENT_KEYWORDS
+                and self.previous_token.normalized not in ["AS", "WITH"]
+                and self.normalized not in ["AS", "SELECT", "IF", "SET", "WITH"]
+        )
+
+
 
     @property
     def is_with_statement_nested_in_subquery(self) -> bool:
