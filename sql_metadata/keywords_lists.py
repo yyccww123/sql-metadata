@@ -31,6 +31,7 @@ TABLE_ADJUSTMENT_KEYWORDS = {
     "INTO",
     "UPDATE",
     "TABLE",
+    "USING",
 }
 
 # next statement beginning after with statement
