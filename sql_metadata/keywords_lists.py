@@ -78,6 +78,7 @@ class QueryType(str, Enum):
     CREATE = "CREATE TABLE"
     ALTER = "ALTER TABLE"
     DROP = "DROP TABLE"
+    MERGE = "MERGE"
 
 
 class TokenType(str, Enum):
@@ -105,6 +106,7 @@ SUPPORTED_QUERY_TYPES = {
     "CREATETABLE": QueryType.CREATE,
     "ALTERTABLE": QueryType.ALTER,
     "DROPTABLE": QueryType.DROP,
+    "MERGE": QueryType.MERGE
 }
 
 # all the keywords we care for - rest is ignored in assigning
