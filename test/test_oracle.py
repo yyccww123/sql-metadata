@@ -17,8 +17,7 @@ def test_to_table():
     ).columns
 
 
-def test_complex_hive_query():
-    # https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-InsertingdataintoHiveTablesfromqueries
+def test_from_table():
     dag = """
 INSERT OVERWRITE TABLE foo_report
 SELECT
