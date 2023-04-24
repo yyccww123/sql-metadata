@@ -269,23 +269,26 @@ class SQLToken:  # pylint: disable=R0902, R0904
     @property
     def is_potential_from_table_name(self) -> bool:
         """
-        Checks if token is a possible candidate for table name
+        Checks if token is a possible candidate for from table name
         """
         return (
                 (self.is_name or self.is_keyword)
                 and self.last_keyword_normalized in FROM_TABLE_ADJUSTMENT_KEYWORDS
                 and self.previous_token.normalized not in ["AS", "WITH"]
                 and self.normalized not in ["AS", "SELECT", "IF", "SET", "WITH"]
+                and self.previous_token.last_keyword_normalized not in ["DELETE"]
         )
 
     @property
     def is_potential_to_table_name(self) -> bool:
         """
-        Checks if token is a possible candidate for table name
+        Checks if token is a possible candidate for to table name
         """
         return (
                 (self.is_name or self.is_keyword)
-                and self.last_keyword_normalized in TO_TABLE_ADJUSTMENT_KEYWORDS
+                and (self.last_keyword_normalized in TO_TABLE_ADJUSTMENT_KEYWORDS
+                    or (self.last_keyword_normalized in ["FROM"] and self.previous_token.last_keyword_normalized in ["DELETE"])
+                     )
                 and self.previous_token.normalized not in ["AS", "WITH"]
                 and self.normalized not in ["AS", "SELECT", "IF", "SET", "WITH"]
         )
