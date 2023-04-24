@@ -32,5 +32,5 @@ def test_from_to_table():
         delete from aa
         where a in (select * from bb)
         """
-    # assert ["aa"] == Parser(sql).to_tables
+    assert ["aa"] == Parser(sql).to_tables
     assert ["bb"] == Parser(sql).from_tables
