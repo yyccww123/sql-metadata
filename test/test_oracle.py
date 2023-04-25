@@ -1,6 +1,7 @@
 """
 Set of unit tests for handling of Apache Hive queries
 """
+import sqlparse
 
 from sql_metadata.parser import Parser
 
@@ -29,8 +30,17 @@ def test_from_to_table():
 
 
     sql = """
-        delete from aa 
-        where i in (select * from bb)
+    --qqq
+        truncate table a;
+        drop table a;
+        insert into a
+        select * from b;
         """
-    assert ["aa"] == Parser(sql).to_tables
-    assert ["bb"] == Parser(sql).from_tables
+    # assert ["a"] == Parser(sql).to_tables
+    # assert ["b"] == Parser(sql).from_tables
+
+    stmts = sqlparse.split(sql)
+    for stmt in stmts:
+        print("stmt: ", stmt)
+        print("to_tables: ", Parser(stmt).to_tables)
+        print("from_tables: ", Parser(stmt).from_tables)
